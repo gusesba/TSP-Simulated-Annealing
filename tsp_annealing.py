@@ -62,10 +62,6 @@ def main():
 
   n = 20
   print("\nSetting n = %d " % n)
-  print("\nOptimal solution is 0, 1, 2, . . " + \
-    str(n-1))
-  print("Optimal solution has total distance = %0.1f " \
-    % (n-1))
   rnd = np.random.RandomState(4) 
   cost = rnd.randint(1, 11, size=(n, n))
   max_iter = 2500
