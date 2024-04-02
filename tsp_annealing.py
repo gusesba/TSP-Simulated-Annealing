@@ -1,7 +1,5 @@
 import numpy as np
 
-verbose = False
-
 def total_dist(route, cost):
   d = 0.0  # total distance between cities
   n = len(route)
@@ -24,13 +22,10 @@ def solve(n_cities, rnd, max_iter,
   curr_temperature = start_temperature
   soln = np.arange(n_cities, dtype=np.int64)
   rnd.shuffle(soln)
-  
-  if verbose :
-    print("Initial guess: ")
-    print(soln)
-    print("Initial distance: ")
-    print(total_dist(soln, cost))
-
+  print("Initial guess: ")
+  print(soln)
+  print("Initial distance: ")
+  print(total_dist(soln, cost))
   iteration = 0
   interval = (int)(max_iter / 10)
   accept_p = 0.0
@@ -49,11 +44,10 @@ def solve(n_cities, rnd, max_iter,
       # else don't accept
 
     if iteration % interval == 0:
-      if verbose :
-        print("iter = %6d | \
-        temperature = %10.4f | dist = %d" % \
-        (iteration, curr_temperature, total_dist(soln, cost)))
-        print("soln = %s " % str(soln))
+      print("iter = %6d | \
+      temperature = %10.4f | dist = %d" % \
+      (iteration, curr_temperature, total_dist(soln, cost)))
+      print("soln = %s " % str(soln))
 
     if curr_temperature < 0.00001:
       curr_temperature = 0.00001
@@ -61,67 +55,39 @@ def solve(n_cities, rnd, max_iter,
       curr_temperature *= alpha
     iteration += 1
 
-  return soln   
+  return soln       
 
-def run(n, max_iter, start_temperature, alpha, seed):
-  if verbose:
-    print("\nBegin TSP simulated annealing demo ")
+def main():
+  print("\nBegin TSP simulated annealing demo ")
 
-  
-  if verbose:
-    print("\nSetting n = %d " % n)
-  rnd = np.random.RandomState(seed) 
+  n = 20
+  print("\nSetting n = %d " % n)
+  rnd = np.random.RandomState(4) 
   cost = rnd.randint(1, 11, size=(n, n))
-  
+  max_iter = 25000
+  start_temperature = 10000.0
+  alpha = 0.3
 
-  if verbose:
-    print("\nSettings: ")
-    print("max_iter = %d " % max_iter)
-    print("start_temperature = %0.1f " \
-      % start_temperature)
-    print("alpha = %0.2f " % alpha)
+  print("\nSettings: ")
+  print("max_iter = %d " % max_iter)
+  print("start_temperature = %0.1f " \
+    % start_temperature)
+  print("alpha = %0.2f " % alpha)
   
-    print("\nStarting solve() ")
+  print("\nStarting solve() ")
   soln = solve(n, rnd, max_iter, 
-  start_temperature, alpha, cost)
-  if verbose:
-    print("Finished solve() ")
+    start_temperature, alpha, cost)
+  print("Finished solve() ")
 
-    print("\nBest solution found: ")
-    print(soln)
+  print("\nBest solution found: ")
+  print(soln)
   dist = total_dist(soln,cost)
-  if verbose:
-    print("\nTotal distance = %0.1f " % dist)
+  print("\nTotal distance = %0.1f " % dist)
 
   # print("\nDistances: ")
   # print(cost)
 
-    print("\nEnd demo ")   
-
-  return dist 
-
-def test():
-  n = 20
-  max_iter = 2500
-  start_temperature = 4000.0
-  alpha = 0.0
-  seed = 4
-  
-  result = np.zeros((19, 5), dtype=np.float64)
-
-  for i in range(19):
-    alpha += 0.05
-    for j in range(5):
-      start_temperature += 2000.0
-      seed = 1
-      for k in range(20):
-        result[i][j] += run(n, max_iter, start_temperature, alpha, seed)/20.0
-        seed += 1
-  
-  print(result)
-
-def main():
-  test()
+  print("\nEnd demo ")
 
 if __name__ == "__main__":
   main()
